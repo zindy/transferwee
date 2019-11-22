@@ -112,12 +112,14 @@ def download_url(url: str) -> str:
     return j.get('direct_link')
 
 
-def download(url: str) -> None:
+def download(url: str) -> str:
     """Given a `we.tl/' or `wetransfer.com/downloads/' download it.
 
     First a direct link is retrieved (via download_url()), the filename will
     be extracted to it and it will be fetched and stored on the current
     working directory.
+    
+    Return he filename of the file downloaded.
     """
     dl_url = download_url(url)
     file = urllib.parse.urlparse(dl_url).path.split('/')[-1]
@@ -126,7 +128,8 @@ def download(url: str) -> None:
     with open(file, 'wb') as f:
         for chunk in r.iter_content(chunk_size=1024):
             f.write(chunk)
-
+            
+    return file
 
 def _file_name_and_size(file: str) -> dict:
     """Given a file, prepare the "name" and "size" dictionary.
